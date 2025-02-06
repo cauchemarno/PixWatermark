@@ -1,0 +1,11 @@
+info_text = ("<h2>Help</h2>"
+        "<big>1. Choose your target folder to process images.<br>"
+        "2. Choose your watermark to apply.<br>"
+        "3. Set desired settings.<br>"
+        "4. Click \"❇️ Mark it!\".<br><br>"
+        "Supported image types: PNG, JPG, JPEG.<br>"
+        "Offsets set from top-left corner.</big>"
+        "<hr><h2>Info</h2>"
+        "<big>Pix Watermark version 1.0.<br><br>"
+        "Made by @cauchemarno.<br><br>"
+        "Check the source code: <a href='https://github.com/cauchemarno/PixWatermark'>GitHub</a>.</big>")
