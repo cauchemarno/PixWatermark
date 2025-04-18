@@ -1,16 +1,14 @@
-from PyQt6.QtWidgets import QHBoxLayout, QPushButton
+from pathlib import Path
+from PyQt6.QtWidgets import QHBoxLayout, QPushButton, QFileDialog
 from ui import popup
-from settings import SettingsManager
-from .info_text import info_text
-from settings import WATERMARK_SIZE, WATERMARK_TRANSPARENCY, HORIZONTAL_OFFSET, VERTICAL_OFFSET
+from ui.components.info_text import info_text
+
 
 class SettingsButtonsLayout(QHBoxLayout):
-    def __init__(self, main_window, settings_manager: SettingsManager):
+    def __init__(self, main_window, settings_manager):
         super().__init__()
         self.main_window = main_window
-
         self.settings_manager = settings_manager
-
         self._init_ui()
 
     def _init_ui(self):
@@ -19,10 +17,10 @@ class SettingsButtonsLayout(QHBoxLayout):
         self._connect_signals()
 
     def _init_components(self):
-        self.load_button = QPushButton("📂 Load Settings")
+        self.load_button = QPushButton("📂 Load Preset")
         self.info_button = QPushButton("ℹ️")
         self.info_button.setFixedSize(24, 24)
-        self.save_button = QPushButton("📝 Save Settings")
+        self.save_button = QPushButton("💾 Save Preset")
 
     def _init_layout(self):
         self.addWidget(self.load_button)
@@ -30,20 +28,36 @@ class SettingsButtonsLayout(QHBoxLayout):
         self.addWidget(self.save_button)
 
     def _connect_signals(self):
-        self.save_button.clicked.connect(self._save_settings)
-        self.load_button.clicked.connect(self._load_settings)
+        self.save_button.clicked.connect(self._save_preset)
+        self.load_button.clicked.connect(self._load_preset)
         self.info_button.clicked.connect(lambda: popup("Information", info_text, "Question"))
 
-    def _save_settings(self):
+    def _save_preset(self):
         settings = self._get_current_settings()
-        self.settings_manager.save(settings)
-        popup("Success", "Settings saved!")
+        file_path, _ = QFileDialog.getSaveFileName(
+            self.main_window,
+            "Save Preset As",
+            "my_preset.json",
+            "JSON Files (*.json)"
+        )
+        if file_path:
+            self.settings_manager.save_preset(settings, Path(file_path))
+            popup("Success", "Preset saved!")
 
-    def _load_settings(self):
-        settings = self.settings_manager.load_from_file()
+    def _load_preset(self):
+        file_path, _ = QFileDialog.getOpenFileName(
+            self.main_window,
+            "Load Preset",
+            "",
+            "JSON Files (*.json)"
+        )
+        if not file_path:
+            return
+
+        settings = self.settings_manager.load_preset(Path(file_path))
         if settings:
             self._apply_settings(settings)
-            popup("Success", "Settings loaded successfully!")
+            popup("Success", "Preset loaded!")
 
     def _get_current_settings(self):
         return {
@@ -57,11 +71,11 @@ class SettingsButtonsLayout(QHBoxLayout):
 
     def _apply_settings(self, settings=None):
         if settings is None:
-            settings = self.settings_manager.load()
+            settings = self.settings_manager.load_persistent()
 
-        self.main_window.target_folder.set_folder(settings.get("target_folder", ""))
-        self.main_window.watermark_file.set_file(settings.get("watermark_file", ""))
-        self.main_window.watermark_frame.set_size(settings.get("size", WATERMARK_SIZE['DEFAULT']))
-        self.main_window.watermark_frame.set_transparency(settings.get("transparency", WATERMARK_TRANSPARENCY['DEFAULT']))
-        self.main_window.offsets_frame.set_horizontal(settings.get("horizontal_offset", HORIZONTAL_OFFSET['DEFAULT']))
-        self.main_window.offsets_frame.set_vertical(settings.get("vertical_offset", VERTICAL_OFFSET['DEFAULT']))
+        self.main_window.target_folder.set_folder(settings["target_folder"])
+        self.main_window.watermark_file.set_file(settings["watermark_file"])
+        self.main_window.watermark_frame.set_size(settings["size"])
+        self.main_window.watermark_frame.set_transparency(settings["transparency"])
+        self.main_window.offsets_frame.set_horizontal(settings["horizontal_offset"])
+        self.main_window.offsets_frame.set_vertical(settings["vertical_offset"])

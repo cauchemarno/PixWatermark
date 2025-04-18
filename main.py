@@ -1,25 +1,29 @@
-import ctypes
-import os
 import sys
-from PyQt6.QtGui import QIcon
+import ctypes
 from PyQt6.QtWidgets import QApplication
+from PyQt6.QtGui import QIcon
 
 from settings import SettingsManager
 from ui.main_window import MainWindow
-
-
-def resource_path(relative_path):
-    base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
-    return os.path.join(base_path, relative_path)
+from resources import resources_rc
 
 
 def main():
     app = QApplication(sys.argv)
-    icon_path = resource_path("icon.ico")
-    app.setWindowIcon(QIcon(icon_path))
-    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID('pix_watermark')
+
+    if sys.platform.startswith("win"):
+        icon = QIcon(":/resources/icons/icon.ico")
+        ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID('PixWatermark')
+    elif sys.platform.startswith("darwin"):
+        icon = QIcon(":/resources/icons/icon.icns")
+    else:
+        icon = QIcon(":/resources/icons/icon.png")
+
+    app.setWindowIcon(icon)
+
     settings_manager = SettingsManager()
     main_window = MainWindow(settings_manager)
+
     main_window.show()
     sys.exit(app.exec())
 

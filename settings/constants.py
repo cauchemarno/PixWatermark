@@ -1,4 +1,3 @@
-SETTINGS_FILE = "settings.json"
 OUTPUT_FOLDER_NAME = "output"
 
 WATERMARK_SIZE = {

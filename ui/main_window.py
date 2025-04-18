@@ -2,8 +2,14 @@ from PyQt6.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QHBoxLayout, QApp
 from PyQt6.QtCore import Qt
 
 from settings import SettingsManager
-from .components import TargetFolderWidget, TargetWatermarkWidget, WatermarkFrame, OffsetsFrame, \
-    SettingsButtonsLayout, ProcessLayout
+from .components import (
+    TargetFolderWidget,
+    TargetWatermarkWidget,
+    WatermarkFrame,
+    OffsetsFrame,
+    SettingsButtonsLayout,
+    ProcessLayout,
+)
 
 WINDOW_WIDTH = 450
 WINDOW_HEIGHT = 320
@@ -14,7 +20,8 @@ class MainWindow(QMainWindow):
     def __init__(self, settings_manager: SettingsManager):
         super().__init__()
         self.settings_manager = settings_manager
-        self.settings = self.settings_manager.load()
+
+        self.settings = self.settings_manager.load_persistent()
 
         self._init_window()
         self._init_components()
@@ -68,3 +75,15 @@ class MainWindow(QMainWindow):
             self.setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT_PROGRESS)
         else:
             self.setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT)
+
+    def closeEvent(self, event):
+        current = {
+            "target_folder": self.target_folder.get_folder(),
+            "watermark_file": self.watermark_file.get_file(),
+            "size": self.watermark_frame.get_size(),
+            "transparency": self.watermark_frame.get_transparency(),
+            "horizontal_offset": self.offsets_frame.get_horizontal(),
+            "vertical_offset": self.offsets_frame.get_vertical(),
+        }
+        self.settings_manager.save_persistent(current)
+        event.accept()
