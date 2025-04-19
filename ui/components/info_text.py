@@ -5,6 +5,7 @@ info_text = ("<h2>Help</h2>"
         "4. Click \"❇️ Mark it!\".<br><br>"
         "Supported image types: PNG, JPG, JPEG.<br>"
         "Offsets set from top-left corner.</big>"
-        "<hr><h2>Pix Watermark</h2>"
-        "<big>v1.0.1<br><br>"
-        "Check the source code: <a href='https://github.com/cauchemarno/PixWatermark'>GitHub</a>.</big>")
+        "<hr><h2>Pix Watermark v1.0.1</h2>"
+        "<big>Check the source code: <a href='https://github.com/cauchemarno/PixWatermark'>GitHub</a>.<br>"
+        "App logo is an emoji graphics from <a href='https://github.com/twitter/twemoji'>Twemoji</a> by Twitter(X), "
+        "used under <a href='https://creativecommons.org/licenses/by/4.0/'>CC BY 4.0</a>.</big>")
