@@ -19,9 +19,9 @@
 
 ## 🖥 Screenshots
 
-![App Screenshot](https://i.imgur.com/qEi4LXg.png)
+![App Screenshot](assets/app_screenshot.png)
 
-![Usage Example](https://i.imgur.com/MM7xKay.png)
+![Usage Example](assets/usage_example.png)
 
 ## 🧪 Run from Source
 To run PixWatermark from source, follow these steps:
