@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QVBoxLayout, QPushButton, QProgressBar
 
-from app import process_images
+from models import process_images
 from ui import popup
 
 
